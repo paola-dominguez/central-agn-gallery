@@ -3,13 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AGN Merger — Opening-Angle Diagnostics (τ < 0.5 Gyr)</title>
+  <title>AGN Merger — Opening-Angle Diagnostics (CR energy density)</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: Arial, sans-serif; background: #111; color: #eee; }
     header { padding: 1.5rem 2rem; background: #1a1a2e; border-bottom: 1px solid #333; }
     header h1 { font-size: 1.4rem; }
     header p  { font-size: 0.85rem; color: #aaa; margin-top: 0.3rem; }
+    #tabs { display: flex; gap: 0.4rem; padding: 0.8rem 2rem 0; background: #16213e; }
+    #tabs .tab {
+      display: inline-block; padding: 0.5rem 1.1rem; font-size: 0.85rem;
+      color: #aaa; text-decoration: none; border-radius: 6px 6px 0 0;
+      background: #0f3460;
+    }
+    #tabs .tab.active { color: #fff; background: #e94560; font-weight: bold; }
     #controls {
       display: flex; flex-wrap: wrap; gap: 0.8rem;
       padding: 1rem 2rem; background: #16213e;
@@ -38,10 +45,14 @@
   </style>
 </head>
 <body>
+<div id="tabs">
+  <a class="tab active" href="../opening_angle_gifs_tau_early/index.html">CR energy density</a>
+  <a class="tab" href="../opening_angle_gifs_tau_early_radio/index.html">150 MHz radio</a>
+</div>
 <header>
-  <h1>AGN Merger — Opening-Angle Diagnostics (τ < 0.5 Gyr)</h1>
+  <h1>AGN Merger — Opening-Angle Diagnostics (CR energy density)</h1>
   <p>Central AGN with CR in a binary galaxy cluster merger — Domínguez-Fernández et al. 2024</p>
-  <p style="font-size:0.8rem; color:#aaa; margin-top:0.4rem;">Opening-angle diagnostic: brightest-pixel-per-half ("maxima", orange X) and furthest-pair ("longest baseline", red dot) lobe detection at σ = 3, animated across the first 0.5 Gyr after jet launch. The direction where the line of sight runs along the jet axis is marked <span class="badge">LOS ∥ jet</span> — only one blob is visible there, so no opening angle is drawn.</p>
+  <p style="font-size:0.8rem; color:#aaa; margin-top:0.4rem;">Opening-angle diagnostic: brightest-pixel-per-half ("maxima", cyan X) and furthest-pair ("longest baseline", red dot, connected to the BH) lobe detection at σ = 3, animated across the qualifying snaps after jet launch. The direction where the line of sight runs along the jet axis is marked <span class="badge">LOS ∥ jet</span> — only one blob is visible there, so no opening angle is drawn.</p>
 </header>
 
 <div id="controls">

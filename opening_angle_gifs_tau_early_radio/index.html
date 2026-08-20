@@ -41,6 +41,25 @@
       background: #e94560; color: white; border-radius: 3px;
       padding: 1px 5px; font-size: 0.65rem;
     }
+    .gif-dl { color: #7eb8f7; text-decoration: none; margin-left: 0.4rem; }
+    .gif-dl:hover { text-decoration: underline; }
+    .scrub-controls {
+      display: flex; align-items: center; gap: 0.6rem; margin-top: 0.7rem;
+      padding-top: 0.6rem; border-top: 1px solid #333;
+    }
+    .play-btn {
+      background: #e94560; border: none; color: white; padding: 5px 12px;
+      border-radius: 4px; cursor: pointer; font-size: 0.8rem; flex: 0 0 auto;
+    }
+    .scrub-slider { flex: 1 1 auto; min-width: 100px; }
+    .tau-label {
+      font-size: 0.78rem; color: #ddd; min-width: 6.5rem; text-align: right;
+      flex: 0 0 auto;
+    }
+    .speed-select {
+      background: #0f3460; color: #eee; border: 1px solid #444;
+      border-radius: 4px; padding: 3px 6px; font-size: 0.78rem; flex: 0 0 auto;
+    }
     .hidden { display: none !important; }
   </style>
 </head>
@@ -52,7 +71,7 @@
 <header>
   <h1>AGN Merger — Opening-Angle Diagnostics (150 MHz radio)</h1>
   <p>Central AGN with CR in a binary galaxy cluster merger — Domínguez-Fernández et al. 2024</p>
-  <p style="font-size:0.8rem; color:#aaa; margin-top:0.4rem;">Opening-angle diagnostic: brightest-pixel-per-half ("maxima", cyan X) and furthest-pair ("longest baseline", red dot, connected to the BH) lobe detection at σ = 3, animated across the qualifying snaps after jet launch. The direction where the line of sight runs along the jet axis is marked <span class="badge">LOS ∥ jet</span> — only one blob is visible there, so no opening angle is drawn.</p>
+  <p style="font-size:0.8rem; color:#aaa; margin-top:0.4rem;">Opening-angle diagnostic: brightest-pixel-per-half ("maxima", cyan X) and furthest-pair ("longest baseline", red dot, connected to the BH) lobe detection at σ = 3, shown across the qualifying snaps after jet launch — drag the slider or hit Play to step through time (all 3 projections stay in sync); each direction also has a standalone GIF download. The direction where the line of sight runs along the jet axis is marked <span class="badge">LOS ∥ jet</span> — only one blob is visible there, so no opening angle is drawn.</p>
 </header>
 
 <div id="controls">
@@ -103,825 +122,1400 @@
 <div id="count"></div>
 
 <div id="runs">
-<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start50" data-jetdir="x">
+<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start50" data-jetdir="x" data-sim="r0p2_theta10" data-snaps='[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]' data-taus='[11.479049915868117, 72.95809983173623, 134.4371497476044, 195.91619966347247, 257.39524957934066, 310.0915780786562, 371.5706279945243, 433.04967791039246, 494.5287278262606, 556.0077777421287, 617.4868276579969, 670.1831561573124, 731.6622060731806]'>
   <p class="run-caption">r0p2_theta10  —  R=1:5, θ=10° | jet ignition: 50 Myr | initial jet direction: x̂</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_theta10_proj-x.gif" alt="r0p2_theta10 proj-x">
-    <figcaption>Projection X <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_theta10_proj-x/snap_001.png" alt="r0p2_theta10 proj-x">
+    <figcaption>Projection X <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_theta10_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_proj-y.gif" alt="r0p2_theta10 proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_theta10_proj-y/snap_001.png" alt="r0p2_theta10 proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p2_theta10_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_proj-z.gif" alt="r0p2_theta10 proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_theta10_proj-z/snap_001.png" alt="r0p2_theta10 proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p2_theta10_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.01 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start1000" data-jetdir="x">
+<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start1000" data-jetdir="x" data-sim="r0p2_theta10_start1000Myr" data-snaps='[17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]' data-taus='[27.57840573665294, 80.27473423596848, 141.75378415183673, 203.23283406770474, 264.7118839835732, 326.19093389944123, 387.66998381530925, 440.3663123146248, 501.84536223049304, 563.3244121463613, 624.8034620622291, 686.2825119780971, 738.9788404774131]'>
   <p class="run-caption">r0p2_theta10_start1000Myr  —  R=1:5, θ=10° | jet ignition: 1 Gyr | initial jet direction: x̂</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start1000Myr_proj-x.gif" alt="r0p2_theta10_start1000Myr proj-x">
-    <figcaption>Projection X <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_theta10_start1000Myr_proj-x/snap_017.png" alt="r0p2_theta10_start1000Myr proj-x">
+    <figcaption>Projection X <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_theta10_start1000Myr_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start1000Myr_proj-y.gif" alt="r0p2_theta10_start1000Myr proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_theta10_start1000Myr_proj-y/snap_017.png" alt="r0p2_theta10_start1000Myr proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p2_theta10_start1000Myr_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start1000Myr_proj-z.gif" alt="r0p2_theta10_start1000Myr proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_theta10_start1000Myr_proj-z/snap_017.png" alt="r0p2_theta10_start1000Myr proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p2_theta10_start1000Myr_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.03 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start2000" data-jetdir="x">
+<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start2000" data-jetdir="x" data-sim="r0p2_theta10_start2000Myr" data-snaps='[34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46]' data-taus='[46.3740900567534, 99.07041855606894, 160.54946847193696, 222.02851838780498, 283.50756830367345, 344.986618219541, 406.4656681354095, 459.16199663472526, 520.6410465505933, 582.1200964664613, 643.5991463823293, 705.0781962981978, 766.5572462140658]'>
   <p class="run-caption">r0p2_theta10_start2000Myr  —  R=1:5, θ=10° | jet ignition: 2 Gyr | initial jet direction: x̂</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start2000Myr_proj-x.gif" alt="r0p2_theta10_start2000Myr proj-x">
-    <figcaption>Projection X <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_theta10_start2000Myr_proj-x/snap_034.png" alt="r0p2_theta10_start2000Myr proj-x">
+    <figcaption>Projection X <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_theta10_start2000Myr_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start2000Myr_proj-y.gif" alt="r0p2_theta10_start2000Myr proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_theta10_start2000Myr_proj-y/snap_034.png" alt="r0p2_theta10_start2000Myr proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p2_theta10_start2000Myr_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start2000Myr_proj-z.gif" alt="r0p2_theta10_start2000Myr proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_theta10_start2000Myr_proj-z/snap_034.png" alt="r0p2_theta10_start2000Myr proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p2_theta10_start2000Myr_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.05 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start5000" data-jetdir="x">
+<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start5000" data-jetdir="x" data-sim="r0p2_theta10_start5000Myr" data-snaps='[84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]' data-taus='[41.28209310118655, 102.76114301705456, 164.24019293292258, 216.9365214322388, 278.4155713481068, 339.89462126397484, 401.37367117984377, 462.85272109570997, 524.3317710115789, 577.0280995108951, 638.5071494267622, 699.9861993426312, 761.4652492584992]'>
   <p class="run-caption">r0p2_theta10_start5000Myr  —  R=1:5, θ=10° | jet ignition: 5 Gyr | initial jet direction: x̂</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start5000Myr_proj-x.gif" alt="r0p2_theta10_start5000Myr proj-x">
-    <figcaption>Projection X <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_theta10_start5000Myr_proj-x/snap_084.png" alt="r0p2_theta10_start5000Myr proj-x">
+    <figcaption>Projection X <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_theta10_start5000Myr_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start5000Myr_proj-y.gif" alt="r0p2_theta10_start5000Myr proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_theta10_start5000Myr_proj-y/snap_084.png" alt="r0p2_theta10_start5000Myr proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p2_theta10_start5000Myr_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start5000Myr_proj-z.gif" alt="r0p2_theta10_start5000Myr proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_theta10_start5000Myr_proj-z/snap_084.png" alt="r0p2_theta10_start5000Myr proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p2_theta10_start5000Myr_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.04 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start50" data-jetdir="x">
+<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start50" data-jetdir="x" data-sim="r0p2" data-snaps='[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]' data-taus='[14.406623721385657, 72.95809983173623, 131.50957594208685, 190.06105205243742, 254.4676757738231, 313.0191518841737, 371.5706279945242, 430.12210410487484, 494.5287278262605, 553.0802039366112, 611.6316800469617, 670.1831561573124, 734.589779878698]'>
   <p class="run-caption">r0p2  —  R=1:5, θ=20° | jet ignition: 50 Myr | initial jet direction: x̂</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_proj-x.gif" alt="r0p2 proj-x">
-    <figcaption>Projection X <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_proj-x/snap_001.png" alt="r0p2 proj-x">
+    <figcaption>Projection X <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_proj-y.gif" alt="r0p2 proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_proj-y/snap_001.png" alt="r0p2 proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p2_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_proj-z.gif" alt="r0p2 proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_proj-z/snap_001.png" alt="r0p2 proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p2_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.01 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start1000" data-jetdir="x">
+<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start1000" data-jetdir="x" data-sim="r0p2_start1000Myr" data-snaps='[17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]' data-taus='[24.65083193113537, 83.20230804148582, 141.75378415183673, 200.30526026218718, 264.711883983573, 323.26336009392344, 381.8148362042739, 440.3663123146248, 504.7729360360104, 563.3244121463608, 621.8758882567113, 680.4273643670622, 738.9788404774126]'>
   <p class="run-caption">r0p2_start1000Myr  —  R=1:5, θ=20° | jet ignition: 1 Gyr | initial jet direction: x̂</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_start1000Myr_proj-x.gif" alt="r0p2_start1000Myr proj-x">
-    <figcaption>Projection X <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_start1000Myr_proj-x/snap_017.png" alt="r0p2_start1000Myr proj-x">
+    <figcaption>Projection X <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_start1000Myr_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_start1000Myr_proj-y.gif" alt="r0p2_start1000Myr proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_start1000Myr_proj-y/snap_017.png" alt="r0p2_start1000Myr proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p2_start1000Myr_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_start1000Myr_proj-z.gif" alt="r0p2_start1000Myr proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_start1000Myr_proj-z/snap_017.png" alt="r0p2_start1000Myr proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p2_start1000Myr_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.02 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start2000" data-jetdir="x">
+<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start2000" data-jetdir="x" data-sim="r0p2_start2000Myr" data-snaps='[34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46]' data-taus='[43.44651625123561, 101.99799236158651, 160.54946847193696, 219.1009445822874, 283.50756830367345, 342.05904441402345, 400.61052052437435, 459.16199663472526, 523.5686203561108, 582.1200964664613, 640.6715725768113, 699.2230486871626, 763.6296724085478]'>
   <p class="run-caption">r0p2_start2000Myr  —  R=1:5, θ=20° | jet ignition: 2 Gyr | initial jet direction: x̂</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_start2000Myr_proj-x.gif" alt="r0p2_start2000Myr proj-x">
-    <figcaption>Projection X <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_start2000Myr_proj-x/snap_034.png" alt="r0p2_start2000Myr proj-x">
+    <figcaption>Projection X <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_start2000Myr_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_start2000Myr_proj-y.gif" alt="r0p2_start2000Myr proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_start2000Myr_proj-y/snap_034.png" alt="r0p2_start2000Myr proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p2_start2000Myr_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_start2000Myr_proj-z.gif" alt="r0p2_start2000Myr proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_start2000Myr_proj-z/snap_034.png" alt="r0p2_start2000Myr proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p2_start2000Myr_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.04 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start5000" data-jetdir="x">
+<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start5000" data-jetdir="x" data-sim="r0p2_start5000Myr" data-snaps='[84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]' data-taus='[41.28209310118655, 102.76114301705456, 164.24019293292258, 216.9365214322388, 278.4155713481068, 339.89462126397484, 401.37367117984377, 462.85272109570997, 524.3317710115789, 577.0280995108951, 638.5071494267622, 699.9861993426312, 761.4652492584992]'>
   <p class="run-caption">r0p2_start5000Myr  —  R=1:5, θ=20° | jet ignition: 5 Gyr | initial jet direction: x̂</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_start5000Myr_proj-x.gif" alt="r0p2_start5000Myr proj-x">
-    <figcaption>Projection X <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_start5000Myr_proj-x/snap_084.png" alt="r0p2_start5000Myr proj-x">
+    <figcaption>Projection X <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_start5000Myr_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_start5000Myr_proj-y.gif" alt="r0p2_start5000Myr proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_start5000Myr_proj-y/snap_084.png" alt="r0p2_start5000Myr proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p2_start5000Myr_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_start5000Myr_proj-z.gif" alt="r0p2_start5000Myr proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_start5000Myr_proj-z/snap_084.png" alt="r0p2_start5000Myr proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p2_start5000Myr_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.04 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start50" data-jetdir="x">
+<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start50" data-jetdir="x" data-sim="r0p5_theta10" data-snaps='[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]' data-taus='[11.479049915868117, 72.95809983173623, 134.4371497476044, 195.91619966347247, 257.39524957934066, 310.0915780786562, 371.5706279945243, 433.04967791039246, 494.5287278262606, 556.0077777421287, 617.4868276579969, 670.1831561573124, 731.6622060731806]'>
   <p class="run-caption">r0p5_theta10  —  R=1:2, θ=10° | jet ignition: 50 Myr | initial jet direction: x̂</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_theta10_proj-x.gif" alt="r0p5_theta10 proj-x">
-    <figcaption>Projection X <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_theta10_proj-x/snap_001.png" alt="r0p5_theta10 proj-x">
+    <figcaption>Projection X <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_theta10_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_proj-y.gif" alt="r0p5_theta10 proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_theta10_proj-y/snap_001.png" alt="r0p5_theta10 proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p5_theta10_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_proj-z.gif" alt="r0p5_theta10 proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_theta10_proj-z/snap_001.png" alt="r0p5_theta10 proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p5_theta10_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.01 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start1000" data-jetdir="x">
+<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start1000" data-jetdir="x" data-sim="r0p5_theta10_start1000Myr" data-snaps='[17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]' data-taus='[27.57840573665294, 80.27473423596848, 141.75378415183673, 203.23283406770474, 264.7118839835732, 326.19093389944123, 387.66998381530925, 440.3663123146248, 501.84536223049304, 563.3244121463613, 624.8034620622291, 686.2825119780971, 738.9788404774131]'>
   <p class="run-caption">r0p5_theta10_start1000Myr  —  R=1:2, θ=10° | jet ignition: 1 Gyr | initial jet direction: x̂</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start1000Myr_proj-x.gif" alt="r0p5_theta10_start1000Myr proj-x">
-    <figcaption>Projection X <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_theta10_start1000Myr_proj-x/snap_017.png" alt="r0p5_theta10_start1000Myr proj-x">
+    <figcaption>Projection X <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_theta10_start1000Myr_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start1000Myr_proj-y.gif" alt="r0p5_theta10_start1000Myr proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_theta10_start1000Myr_proj-y/snap_017.png" alt="r0p5_theta10_start1000Myr proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p5_theta10_start1000Myr_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start1000Myr_proj-z.gif" alt="r0p5_theta10_start1000Myr proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_theta10_start1000Myr_proj-z/snap_017.png" alt="r0p5_theta10_start1000Myr proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p5_theta10_start1000Myr_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.03 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start2000" data-jetdir="x">
+<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start2000" data-jetdir="x" data-sim="r0p5_theta10_start2000Myr" data-snaps='[34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46]' data-taus='[46.3740900567534, 99.07041855606894, 160.54946847193696, 222.02851838780498, 283.50756830367345, 344.986618219541, 406.4656681354095, 459.16199663472526, 520.6410465505933, 582.1200964664613, 643.5991463823293, 705.0781962981978, 766.5572462140658]'>
   <p class="run-caption">r0p5_theta10_start2000Myr  —  R=1:2, θ=10° | jet ignition: 2 Gyr | initial jet direction: x̂</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start2000Myr_proj-x.gif" alt="r0p5_theta10_start2000Myr proj-x">
-    <figcaption>Projection X <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_theta10_start2000Myr_proj-x/snap_034.png" alt="r0p5_theta10_start2000Myr proj-x">
+    <figcaption>Projection X <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_theta10_start2000Myr_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start2000Myr_proj-y.gif" alt="r0p5_theta10_start2000Myr proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_theta10_start2000Myr_proj-y/snap_034.png" alt="r0p5_theta10_start2000Myr proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p5_theta10_start2000Myr_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start2000Myr_proj-z.gif" alt="r0p5_theta10_start2000Myr proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_theta10_start2000Myr_proj-z/snap_034.png" alt="r0p5_theta10_start2000Myr proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p5_theta10_start2000Myr_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.05 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start5000" data-jetdir="x">
+<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start5000" data-jetdir="x" data-sim="r0p5_theta10_start5000Myr" data-snaps='[84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]' data-taus='[41.28209310118655, 102.76114301705456, 164.24019293292258, 216.9365214322388, 278.4155713481068, 339.89462126397484, 401.37367117984377, 462.85272109570997, 524.3317710115789, 577.0280995108951, 638.5071494267622, 699.9861993426312, 761.4652492584992]'>
   <p class="run-caption">r0p5_theta10_start5000Myr  —  R=1:2, θ=10° | jet ignition: 5 Gyr | initial jet direction: x̂</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start5000Myr_proj-x.gif" alt="r0p5_theta10_start5000Myr proj-x">
-    <figcaption>Projection X <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_theta10_start5000Myr_proj-x/snap_084.png" alt="r0p5_theta10_start5000Myr proj-x">
+    <figcaption>Projection X <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_theta10_start5000Myr_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start5000Myr_proj-y.gif" alt="r0p5_theta10_start5000Myr proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_theta10_start5000Myr_proj-y/snap_084.png" alt="r0p5_theta10_start5000Myr proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p5_theta10_start5000Myr_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start5000Myr_proj-z.gif" alt="r0p5_theta10_start5000Myr proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_theta10_start5000Myr_proj-z/snap_084.png" alt="r0p5_theta10_start5000Myr proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p5_theta10_start5000Myr_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.04 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start50" data-jetdir="x">
+<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start50" data-jetdir="x" data-sim="r0p5" data-snaps='[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]' data-taus='[14.406623721385657, 72.95809983173623, 131.50957594208685, 190.06105205243742, 254.4676757738231, 313.0191518841737, 371.5706279945242, 430.12210410487484, 494.5287278262605, 553.0802039366112, 611.6316800469617, 670.1831561573124, 734.589779878698]'>
   <p class="run-caption">r0p5  —  R=1:2, θ=20° | jet ignition: 50 Myr | initial jet direction: x̂</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_proj-x.gif" alt="r0p5 proj-x">
-    <figcaption>Projection X <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_proj-x/snap_001.png" alt="r0p5 proj-x">
+    <figcaption>Projection X <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_proj-y.gif" alt="r0p5 proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_proj-y/snap_001.png" alt="r0p5 proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p5_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_proj-z.gif" alt="r0p5 proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_proj-z/snap_001.png" alt="r0p5 proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p5_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.01 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start1000" data-jetdir="x">
+<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start1000" data-jetdir="x" data-sim="r0p5_start1000Myr" data-snaps='[17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]' data-taus='[27.57840573665294, 80.27473423596848, 141.75378415183673, 203.23283406770474, 264.7118839835732, 326.19093389944123, 387.66998381530925, 440.3663123146248, 501.84536223049304, 563.3244121463613, 624.8034620622291, 686.2825119780971, 738.9788404774131]'>
   <p class="run-caption">r0p5_start1000Myr  —  R=1:2, θ=20° | jet ignition: 1 Gyr | initial jet direction: x̂</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_start1000Myr_proj-x.gif" alt="r0p5_start1000Myr proj-x">
-    <figcaption>Projection X <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_start1000Myr_proj-x/snap_017.png" alt="r0p5_start1000Myr proj-x">
+    <figcaption>Projection X <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_start1000Myr_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_start1000Myr_proj-y.gif" alt="r0p5_start1000Myr proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_start1000Myr_proj-y/snap_017.png" alt="r0p5_start1000Myr proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p5_start1000Myr_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_start1000Myr_proj-z.gif" alt="r0p5_start1000Myr proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_start1000Myr_proj-z/snap_017.png" alt="r0p5_start1000Myr proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p5_start1000Myr_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.03 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start2000" data-jetdir="x">
+<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start2000" data-jetdir="x" data-sim="r0p5_start2000Myr" data-snaps='[34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46]' data-taus='[46.3740900567534, 99.07041855606894, 160.54946847193696, 222.02851838780498, 283.50756830367345, 344.986618219541, 406.4656681354095, 459.16199663472526, 520.6410465505933, 582.1200964664613, 643.5991463823293, 705.0781962981978, 766.5572462140658]'>
   <p class="run-caption">r0p5_start2000Myr  —  R=1:2, θ=20° | jet ignition: 2 Gyr | initial jet direction: x̂</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_start2000Myr_proj-x.gif" alt="r0p5_start2000Myr proj-x">
-    <figcaption>Projection X <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_start2000Myr_proj-x/snap_034.png" alt="r0p5_start2000Myr proj-x">
+    <figcaption>Projection X <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_start2000Myr_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_start2000Myr_proj-y.gif" alt="r0p5_start2000Myr proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_start2000Myr_proj-y/snap_034.png" alt="r0p5_start2000Myr proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p5_start2000Myr_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_start2000Myr_proj-z.gif" alt="r0p5_start2000Myr proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_start2000Myr_proj-z/snap_034.png" alt="r0p5_start2000Myr proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p5_start2000Myr_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.05 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start5000" data-jetdir="x">
+<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start5000" data-jetdir="x" data-sim="r0p5_start5000Myr" data-snaps='[84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]' data-taus='[41.28209310118655, 102.76114301705456, 164.24019293292258, 216.9365214322388, 278.4155713481068, 339.89462126397484, 401.37367117984377, 462.85272109570997, 524.3317710115789, 577.0280995108951, 638.5071494267622, 699.9861993426312, 761.4652492584992]'>
   <p class="run-caption">r0p5_start5000Myr  —  R=1:2, θ=20° | jet ignition: 5 Gyr | initial jet direction: x̂</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_start5000Myr_proj-x.gif" alt="r0p5_start5000Myr proj-x">
-    <figcaption>Projection X <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_start5000Myr_proj-x/snap_084.png" alt="r0p5_start5000Myr proj-x">
+    <figcaption>Projection X <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_start5000Myr_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_start5000Myr_proj-y.gif" alt="r0p5_start5000Myr proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_start5000Myr_proj-y/snap_084.png" alt="r0p5_start5000Myr proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p5_start5000Myr_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_start5000Myr_proj-z.gif" alt="r0p5_start5000Myr proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_start5000Myr_proj-z/snap_084.png" alt="r0p5_start5000Myr proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p5_start5000Myr_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.04 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start50" data-jetdir="y">
+<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start50" data-jetdir="y" data-sim="r0p2_theta10_jetdir-y" data-snaps='[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]' data-taus='[11.479049915868117, 72.95809983173623, 134.4371497476044, 195.91619966347247, 257.39524957934066, 310.0915780786562, 371.5706279945243, 433.04967791039246, 494.5287278262606, 556.0077777421287, 617.4868276579969, 670.1831561573124, 731.6622060731806]'>
   <p class="run-caption">r0p2_theta10_jetdir-y  —  R=1:5, θ=10° | jet ignition: 50 Myr | initial jet direction: ŷ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_theta10_jetdir-y_proj-x.gif" alt="r0p2_theta10_jetdir-y proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_theta10_jetdir-y_proj-x/snap_001.png" alt="r0p2_theta10_jetdir-y proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p2_theta10_jetdir-y_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_jetdir-y_proj-y.gif" alt="r0p2_theta10_jetdir-y proj-y">
-    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_theta10_jetdir-y_proj-y/snap_001.png" alt="r0p2_theta10_jetdir-y proj-y">
+    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_theta10_jetdir-y_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_jetdir-y_proj-z.gif" alt="r0p2_theta10_jetdir-y proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_theta10_jetdir-y_proj-z/snap_001.png" alt="r0p2_theta10_jetdir-y proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p2_theta10_jetdir-y_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.01 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start1000" data-jetdir="y">
+<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start1000" data-jetdir="y" data-sim="r0p2_theta10_start1000Myr-y" data-snaps='[17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]' data-taus='[27.57840573665294, 80.27473423596848, 141.75378415183673, 203.23283406770474, 264.7118839835732, 326.19093389944123, 387.66998381530925, 440.3663123146248, 501.84536223049304, 563.3244121463613, 624.8034620622291, 686.2825119780971, 738.9788404774131]'>
   <p class="run-caption">r0p2_theta10_start1000Myr-y  —  R=1:5, θ=10° | jet ignition: 1 Gyr | initial jet direction: ŷ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start1000Myr-y_proj-x.gif" alt="r0p2_theta10_start1000Myr-y proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_theta10_start1000Myr-y_proj-x/snap_017.png" alt="r0p2_theta10_start1000Myr-y proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p2_theta10_start1000Myr-y_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start1000Myr-y_proj-y.gif" alt="r0p2_theta10_start1000Myr-y proj-y">
-    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_theta10_start1000Myr-y_proj-y/snap_017.png" alt="r0p2_theta10_start1000Myr-y proj-y">
+    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_theta10_start1000Myr-y_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start1000Myr-y_proj-z.gif" alt="r0p2_theta10_start1000Myr-y proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_theta10_start1000Myr-y_proj-z/snap_017.png" alt="r0p2_theta10_start1000Myr-y proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p2_theta10_start1000Myr-y_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.03 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start2000" data-jetdir="y">
+<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start2000" data-jetdir="y" data-sim="r0p2_theta10_start2000Myr-y" data-snaps='[34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46]' data-taus='[46.3740900567534, 99.07041855606894, 160.54946847193696, 222.02851838780498, 283.50756830367345, 344.986618219541, 406.4656681354095, 459.16199663472526, 520.6410465505933, 582.1200964664613, 643.5991463823293, 705.0781962981978, 766.5572462140658]'>
   <p class="run-caption">r0p2_theta10_start2000Myr-y  —  R=1:5, θ=10° | jet ignition: 2 Gyr | initial jet direction: ŷ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start2000Myr-y_proj-x.gif" alt="r0p2_theta10_start2000Myr-y proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_theta10_start2000Myr-y_proj-x/snap_034.png" alt="r0p2_theta10_start2000Myr-y proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p2_theta10_start2000Myr-y_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start2000Myr-y_proj-y.gif" alt="r0p2_theta10_start2000Myr-y proj-y">
-    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_theta10_start2000Myr-y_proj-y/snap_034.png" alt="r0p2_theta10_start2000Myr-y proj-y">
+    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_theta10_start2000Myr-y_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start2000Myr-y_proj-z.gif" alt="r0p2_theta10_start2000Myr-y proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_theta10_start2000Myr-y_proj-z/snap_034.png" alt="r0p2_theta10_start2000Myr-y proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p2_theta10_start2000Myr-y_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.05 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start5000" data-jetdir="y">
+<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start5000" data-jetdir="y" data-sim="r0p2_theta10_start5000Myr-y" data-snaps='[84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]' data-taus='[41.28209310118655, 102.76114301705456, 164.24019293292258, 216.9365214322388, 278.4155713481068, 339.89462126397484, 401.37367117984377, 462.85272109570997, 524.3317710115789, 577.0280995108951, 638.5071494267622, 699.9861993426312, 761.4652492584992]'>
   <p class="run-caption">r0p2_theta10_start5000Myr-y  —  R=1:5, θ=10° | jet ignition: 5 Gyr | initial jet direction: ŷ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start5000Myr-y_proj-x.gif" alt="r0p2_theta10_start5000Myr-y proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_theta10_start5000Myr-y_proj-x/snap_084.png" alt="r0p2_theta10_start5000Myr-y proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p2_theta10_start5000Myr-y_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start5000Myr-y_proj-y.gif" alt="r0p2_theta10_start5000Myr-y proj-y">
-    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_theta10_start5000Myr-y_proj-y/snap_084.png" alt="r0p2_theta10_start5000Myr-y proj-y">
+    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_theta10_start5000Myr-y_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start5000Myr-y_proj-z.gif" alt="r0p2_theta10_start5000Myr-y proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_theta10_start5000Myr-y_proj-z/snap_084.png" alt="r0p2_theta10_start5000Myr-y proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p2_theta10_start5000Myr-y_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.04 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start50" data-jetdir="y">
+<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start50" data-jetdir="y" data-sim="r0p2_jetdir-y" data-snaps='[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]' data-taus='[14.406623721385657, 72.95809983173623, 131.50957594208685, 190.06105205243742, 254.4676757738231, 313.0191518841737, 371.5706279945242, 430.12210410487484, 494.5287278262605, 553.0802039366112, 611.6316800469617, 670.1831561573124, 734.589779878698]'>
   <p class="run-caption">r0p2_jetdir-y  —  R=1:5, θ=20° | jet ignition: 50 Myr | initial jet direction: ŷ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_jetdir-y_proj-x.gif" alt="r0p2_jetdir-y proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_jetdir-y_proj-x/snap_001.png" alt="r0p2_jetdir-y proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p2_jetdir-y_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_jetdir-y_proj-y.gif" alt="r0p2_jetdir-y proj-y">
-    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_jetdir-y_proj-y/snap_001.png" alt="r0p2_jetdir-y proj-y">
+    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_jetdir-y_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_jetdir-y_proj-z.gif" alt="r0p2_jetdir-y proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_jetdir-y_proj-z/snap_001.png" alt="r0p2_jetdir-y proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p2_jetdir-y_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.01 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start1000" data-jetdir="y">
+<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start1000" data-jetdir="y" data-sim="r0p2_start1000Myr-y" data-snaps='[17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]' data-taus='[24.65083193113537, 83.20230804148582, 141.75378415183673, 200.30526026218718, 264.711883983573, 323.26336009392344, 381.8148362042739, 440.3663123146248, 504.7729360360104, 563.3244121463608, 621.8758882567113, 680.4273643670622, 738.9788404774126]'>
   <p class="run-caption">r0p2_start1000Myr-y  —  R=1:5, θ=20° | jet ignition: 1 Gyr | initial jet direction: ŷ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_start1000Myr-y_proj-x.gif" alt="r0p2_start1000Myr-y proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_start1000Myr-y_proj-x/snap_017.png" alt="r0p2_start1000Myr-y proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p2_start1000Myr-y_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_start1000Myr-y_proj-y.gif" alt="r0p2_start1000Myr-y proj-y">
-    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_start1000Myr-y_proj-y/snap_017.png" alt="r0p2_start1000Myr-y proj-y">
+    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_start1000Myr-y_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_start1000Myr-y_proj-z.gif" alt="r0p2_start1000Myr-y proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_start1000Myr-y_proj-z/snap_017.png" alt="r0p2_start1000Myr-y proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p2_start1000Myr-y_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.02 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start2000" data-jetdir="y">
+<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start2000" data-jetdir="y" data-sim="r0p2_start2000Myr-y" data-snaps='[34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46]' data-taus='[43.44651625123561, 101.99799236158651, 160.54946847193696, 219.1009445822874, 283.50756830367345, 342.05904441402345, 400.61052052437435, 459.16199663472526, 523.5686203561108, 582.1200964664613, 640.6715725768113, 699.2230486871626, 763.6296724085478]'>
   <p class="run-caption">r0p2_start2000Myr-y  —  R=1:5, θ=20° | jet ignition: 2 Gyr | initial jet direction: ŷ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_start2000Myr-y_proj-x.gif" alt="r0p2_start2000Myr-y proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_start2000Myr-y_proj-x/snap_034.png" alt="r0p2_start2000Myr-y proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p2_start2000Myr-y_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_start2000Myr-y_proj-y.gif" alt="r0p2_start2000Myr-y proj-y">
-    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_start2000Myr-y_proj-y/snap_034.png" alt="r0p2_start2000Myr-y proj-y">
+    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_start2000Myr-y_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_start2000Myr-y_proj-z.gif" alt="r0p2_start2000Myr-y proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_start2000Myr-y_proj-z/snap_034.png" alt="r0p2_start2000Myr-y proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p2_start2000Myr-y_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.04 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start5000" data-jetdir="y">
+<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start5000" data-jetdir="y" data-sim="r0p2_start5000Myr-y" data-snaps='[84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]' data-taus='[41.28209310118655, 102.76114301705456, 164.24019293292258, 216.9365214322388, 278.4155713481068, 339.89462126397484, 401.37367117984377, 462.85272109570997, 524.3317710115789, 577.0280995108951, 638.5071494267622, 699.9861993426312, 761.4652492584992]'>
   <p class="run-caption">r0p2_start5000Myr-y  —  R=1:5, θ=20° | jet ignition: 5 Gyr | initial jet direction: ŷ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_start5000Myr-y_proj-x.gif" alt="r0p2_start5000Myr-y proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_start5000Myr-y_proj-x/snap_084.png" alt="r0p2_start5000Myr-y proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p2_start5000Myr-y_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_start5000Myr-y_proj-y.gif" alt="r0p2_start5000Myr-y proj-y">
-    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_start5000Myr-y_proj-y/snap_084.png" alt="r0p2_start5000Myr-y proj-y">
+    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_start5000Myr-y_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_start5000Myr-y_proj-z.gif" alt="r0p2_start5000Myr-y proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_start5000Myr-y_proj-z/snap_084.png" alt="r0p2_start5000Myr-y proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p2_start5000Myr-y_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.04 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start50" data-jetdir="y">
+<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start50" data-jetdir="y" data-sim="r0p5_theta10_jetdir-y" data-snaps='[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]' data-taus='[11.479049915868117, 72.95809983173623, 134.4371497476044, 195.91619966347247, 257.39524957934066, 310.0915780786562, 371.5706279945243, 433.04967791039246, 494.5287278262606, 556.0077777421287, 617.4868276579969, 670.1831561573124, 731.6622060731806]'>
   <p class="run-caption">r0p5_theta10_jetdir-y  —  R=1:2, θ=10° | jet ignition: 50 Myr | initial jet direction: ŷ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_theta10_jetdir-y_proj-x.gif" alt="r0p5_theta10_jetdir-y proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_theta10_jetdir-y_proj-x/snap_001.png" alt="r0p5_theta10_jetdir-y proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p5_theta10_jetdir-y_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_jetdir-y_proj-y.gif" alt="r0p5_theta10_jetdir-y proj-y">
-    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_theta10_jetdir-y_proj-y/snap_001.png" alt="r0p5_theta10_jetdir-y proj-y">
+    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_theta10_jetdir-y_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_jetdir-y_proj-z.gif" alt="r0p5_theta10_jetdir-y proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_theta10_jetdir-y_proj-z/snap_001.png" alt="r0p5_theta10_jetdir-y proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p5_theta10_jetdir-y_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.01 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start1000" data-jetdir="y">
+<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start1000" data-jetdir="y" data-sim="r0p5_theta10_start1000Myr-y" data-snaps='[17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]' data-taus='[27.57840573665294, 80.27473423596848, 141.75378415183673, 203.23283406770474, 264.7118839835732, 326.19093389944123, 387.66998381530925, 440.3663123146248, 501.84536223049304, 563.3244121463613, 624.8034620622291, 686.2825119780971, 738.9788404774131]'>
   <p class="run-caption">r0p5_theta10_start1000Myr-y  —  R=1:2, θ=10° | jet ignition: 1 Gyr | initial jet direction: ŷ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start1000Myr-y_proj-x.gif" alt="r0p5_theta10_start1000Myr-y proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_theta10_start1000Myr-y_proj-x/snap_017.png" alt="r0p5_theta10_start1000Myr-y proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p5_theta10_start1000Myr-y_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start1000Myr-y_proj-y.gif" alt="r0p5_theta10_start1000Myr-y proj-y">
-    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_theta10_start1000Myr-y_proj-y/snap_017.png" alt="r0p5_theta10_start1000Myr-y proj-y">
+    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_theta10_start1000Myr-y_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start1000Myr-y_proj-z.gif" alt="r0p5_theta10_start1000Myr-y proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_theta10_start1000Myr-y_proj-z/snap_017.png" alt="r0p5_theta10_start1000Myr-y proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p5_theta10_start1000Myr-y_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.03 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start2000" data-jetdir="y">
+<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start2000" data-jetdir="y" data-sim="r0p5_theta10_start2000Myr-y" data-snaps='[34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46]' data-taus='[46.3740900567534, 99.07041855606894, 160.54946847193696, 222.02851838780498, 283.50756830367345, 344.986618219541, 406.4656681354095, 459.16199663472526, 520.6410465505933, 582.1200964664613, 643.5991463823293, 705.0781962981978, 766.5572462140658]'>
   <p class="run-caption">r0p5_theta10_start2000Myr-y  —  R=1:2, θ=10° | jet ignition: 2 Gyr | initial jet direction: ŷ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start2000Myr-y_proj-x.gif" alt="r0p5_theta10_start2000Myr-y proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_theta10_start2000Myr-y_proj-x/snap_034.png" alt="r0p5_theta10_start2000Myr-y proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p5_theta10_start2000Myr-y_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start2000Myr-y_proj-y.gif" alt="r0p5_theta10_start2000Myr-y proj-y">
-    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_theta10_start2000Myr-y_proj-y/snap_034.png" alt="r0p5_theta10_start2000Myr-y proj-y">
+    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_theta10_start2000Myr-y_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start2000Myr-y_proj-z.gif" alt="r0p5_theta10_start2000Myr-y proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_theta10_start2000Myr-y_proj-z/snap_034.png" alt="r0p5_theta10_start2000Myr-y proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p5_theta10_start2000Myr-y_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.05 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start5000" data-jetdir="y">
+<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start5000" data-jetdir="y" data-sim="r0p5_theta10_start5000Myr-y" data-snaps='[84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]' data-taus='[41.28209310118655, 102.76114301705456, 164.24019293292258, 216.9365214322388, 278.4155713481068, 339.89462126397484, 401.37367117984377, 462.85272109570997, 524.3317710115789, 577.0280995108951, 638.5071494267622, 699.9861993426312, 761.4652492584992]'>
   <p class="run-caption">r0p5_theta10_start5000Myr-y  —  R=1:2, θ=10° | jet ignition: 5 Gyr | initial jet direction: ŷ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start5000Myr-y_proj-x.gif" alt="r0p5_theta10_start5000Myr-y proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_theta10_start5000Myr-y_proj-x/snap_084.png" alt="r0p5_theta10_start5000Myr-y proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p5_theta10_start5000Myr-y_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start5000Myr-y_proj-y.gif" alt="r0p5_theta10_start5000Myr-y proj-y">
-    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_theta10_start5000Myr-y_proj-y/snap_084.png" alt="r0p5_theta10_start5000Myr-y proj-y">
+    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_theta10_start5000Myr-y_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start5000Myr-y_proj-z.gif" alt="r0p5_theta10_start5000Myr-y proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_theta10_start5000Myr-y_proj-z/snap_084.png" alt="r0p5_theta10_start5000Myr-y proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p5_theta10_start5000Myr-y_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.04 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start50" data-jetdir="y">
+<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start50" data-jetdir="y" data-sim="r0p5_jetdir-y" data-snaps='[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]' data-taus='[14.406623721385657, 72.95809983173623, 131.50957594208685, 190.06105205243742, 254.4676757738231, 313.0191518841737, 371.5706279945242, 430.12210410487484, 494.5287278262605, 553.0802039366112, 611.6316800469617, 670.1831561573124, 734.589779878698]'>
   <p class="run-caption">r0p5_jetdir-y  —  R=1:2, θ=20° | jet ignition: 50 Myr | initial jet direction: ŷ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_jetdir-y_proj-x.gif" alt="r0p5_jetdir-y proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_jetdir-y_proj-x/snap_001.png" alt="r0p5_jetdir-y proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p5_jetdir-y_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_jetdir-y_proj-y.gif" alt="r0p5_jetdir-y proj-y">
-    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_jetdir-y_proj-y/snap_001.png" alt="r0p5_jetdir-y proj-y">
+    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_jetdir-y_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_jetdir-y_proj-z.gif" alt="r0p5_jetdir-y proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_jetdir-y_proj-z/snap_001.png" alt="r0p5_jetdir-y proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p5_jetdir-y_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.01 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start1000" data-jetdir="y">
+<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start1000" data-jetdir="y" data-sim="r0p5_start1000Myr-y" data-snaps='[17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]' data-taus='[27.57840573665294, 80.27473423596848, 141.75378415183673, 203.23283406770474, 264.7118839835732, 326.19093389944123, 387.66998381530925, 440.3663123146248, 501.84536223049304, 563.3244121463613, 624.8034620622291, 686.2825119780971, 738.9788404774131]'>
   <p class="run-caption">r0p5_start1000Myr-y  —  R=1:2, θ=20° | jet ignition: 1 Gyr | initial jet direction: ŷ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_start1000Myr-y_proj-x.gif" alt="r0p5_start1000Myr-y proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_start1000Myr-y_proj-x/snap_017.png" alt="r0p5_start1000Myr-y proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p5_start1000Myr-y_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_start1000Myr-y_proj-y.gif" alt="r0p5_start1000Myr-y proj-y">
-    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_start1000Myr-y_proj-y/snap_017.png" alt="r0p5_start1000Myr-y proj-y">
+    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_start1000Myr-y_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_start1000Myr-y_proj-z.gif" alt="r0p5_start1000Myr-y proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_start1000Myr-y_proj-z/snap_017.png" alt="r0p5_start1000Myr-y proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p5_start1000Myr-y_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.03 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start2000" data-jetdir="y">
+<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start2000" data-jetdir="y" data-sim="r0p5_start2000Myr-y" data-snaps='[34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46]' data-taus='[46.3740900567534, 99.07041855606894, 160.54946847193696, 222.02851838780498, 283.50756830367345, 344.986618219541, 406.4656681354095, 459.16199663472526, 520.6410465505933, 582.1200964664613, 643.5991463823293, 705.0781962981978, 766.5572462140658]'>
   <p class="run-caption">r0p5_start2000Myr-y  —  R=1:2, θ=20° | jet ignition: 2 Gyr | initial jet direction: ŷ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_start2000Myr-y_proj-x.gif" alt="r0p5_start2000Myr-y proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_start2000Myr-y_proj-x/snap_034.png" alt="r0p5_start2000Myr-y proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p5_start2000Myr-y_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_start2000Myr-y_proj-y.gif" alt="r0p5_start2000Myr-y proj-y">
-    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_start2000Myr-y_proj-y/snap_034.png" alt="r0p5_start2000Myr-y proj-y">
+    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_start2000Myr-y_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_start2000Myr-y_proj-z.gif" alt="r0p5_start2000Myr-y proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_start2000Myr-y_proj-z/snap_034.png" alt="r0p5_start2000Myr-y proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p5_start2000Myr-y_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.05 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start5000" data-jetdir="y">
+<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start5000" data-jetdir="y" data-sim="r0p5_start5000Myr-y" data-snaps='[84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]' data-taus='[41.28209310118655, 102.76114301705456, 164.24019293292258, 216.9365214322388, 278.4155713481068, 339.89462126397484, 401.37367117984377, 462.85272109570997, 524.3317710115789, 577.0280995108951, 638.5071494267622, 699.9861993426312, 761.4652492584992]'>
   <p class="run-caption">r0p5_start5000Myr-y  —  R=1:2, θ=20° | jet ignition: 5 Gyr | initial jet direction: ŷ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_start5000Myr-y_proj-x.gif" alt="r0p5_start5000Myr-y proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_start5000Myr-y_proj-x/snap_084.png" alt="r0p5_start5000Myr-y proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p5_start5000Myr-y_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_start5000Myr-y_proj-y.gif" alt="r0p5_start5000Myr-y proj-y">
-    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_start5000Myr-y_proj-y/snap_084.png" alt="r0p5_start5000Myr-y proj-y">
+    <figcaption>Projection Y <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_start5000Myr-y_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_start5000Myr-y_proj-z.gif" alt="r0p5_start5000Myr-y proj-z">
-    <figcaption>Projection Z</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_start5000Myr-y_proj-z/snap_084.png" alt="r0p5_start5000Myr-y proj-z">
+    <figcaption>Projection Z <a class="gif-dl" href="r0p5_start5000Myr-y_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.04 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start50" data-jetdir="z">
+<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start50" data-jetdir="z" data-sim="r0p2_theta10_jetdir-z" data-snaps='[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]' data-taus='[11.479049915868117, 72.95809983173623, 134.4371497476044, 195.91619966347247, 257.39524957934066, 310.0915780786562, 371.5706279945243, 433.04967791039246, 494.5287278262606, 556.0077777421287, 617.4868276579969, 670.1831561573124, 731.6622060731806]'>
   <p class="run-caption">r0p2_theta10_jetdir-z  —  R=1:5, θ=10° | jet ignition: 50 Myr | initial jet direction: ẑ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_theta10_jetdir-z_proj-x.gif" alt="r0p2_theta10_jetdir-z proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_theta10_jetdir-z_proj-x/snap_001.png" alt="r0p2_theta10_jetdir-z proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p2_theta10_jetdir-z_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_jetdir-z_proj-y.gif" alt="r0p2_theta10_jetdir-z proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_theta10_jetdir-z_proj-y/snap_001.png" alt="r0p2_theta10_jetdir-z proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p2_theta10_jetdir-z_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_jetdir-z_proj-z.gif" alt="r0p2_theta10_jetdir-z proj-z">
-    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_theta10_jetdir-z_proj-z/snap_001.png" alt="r0p2_theta10_jetdir-z proj-z">
+    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_theta10_jetdir-z_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.01 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start1000" data-jetdir="z">
+<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start1000" data-jetdir="z" data-sim="r0p2_theta10_start1000Myr-z" data-snaps='[17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]' data-taus='[27.57840573665294, 80.27473423596848, 141.75378415183673, 203.23283406770474, 264.7118839835732, 326.19093389944123, 387.66998381530925, 440.3663123146248, 501.84536223049304, 563.3244121463613, 624.8034620622291, 686.2825119780971, 738.9788404774131]'>
   <p class="run-caption">r0p2_theta10_start1000Myr-z  —  R=1:5, θ=10° | jet ignition: 1 Gyr | initial jet direction: ẑ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start1000Myr-z_proj-x.gif" alt="r0p2_theta10_start1000Myr-z proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_theta10_start1000Myr-z_proj-x/snap_017.png" alt="r0p2_theta10_start1000Myr-z proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p2_theta10_start1000Myr-z_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start1000Myr-z_proj-y.gif" alt="r0p2_theta10_start1000Myr-z proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_theta10_start1000Myr-z_proj-y/snap_017.png" alt="r0p2_theta10_start1000Myr-z proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p2_theta10_start1000Myr-z_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start1000Myr-z_proj-z.gif" alt="r0p2_theta10_start1000Myr-z proj-z">
-    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_theta10_start1000Myr-z_proj-z/snap_017.png" alt="r0p2_theta10_start1000Myr-z proj-z">
+    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_theta10_start1000Myr-z_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.03 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start2000" data-jetdir="z">
+<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start2000" data-jetdir="z" data-sim="r0p2_theta10_start2000Myr-z" data-snaps='[34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46]' data-taus='[46.3740900567534, 99.07041855606894, 160.54946847193696, 222.02851838780498, 283.50756830367345, 344.986618219541, 406.4656681354095, 459.16199663472526, 520.6410465505933, 582.1200964664613, 643.5991463823293, 705.0781962981978, 766.5572462140658]'>
   <p class="run-caption">r0p2_theta10_start2000Myr-z  —  R=1:5, θ=10° | jet ignition: 2 Gyr | initial jet direction: ẑ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start2000Myr-z_proj-x.gif" alt="r0p2_theta10_start2000Myr-z proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_theta10_start2000Myr-z_proj-x/snap_034.png" alt="r0p2_theta10_start2000Myr-z proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p2_theta10_start2000Myr-z_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start2000Myr-z_proj-y.gif" alt="r0p2_theta10_start2000Myr-z proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_theta10_start2000Myr-z_proj-y/snap_034.png" alt="r0p2_theta10_start2000Myr-z proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p2_theta10_start2000Myr-z_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start2000Myr-z_proj-z.gif" alt="r0p2_theta10_start2000Myr-z proj-z">
-    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_theta10_start2000Myr-z_proj-z/snap_034.png" alt="r0p2_theta10_start2000Myr-z proj-z">
+    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_theta10_start2000Myr-z_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.05 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start5000" data-jetdir="z">
+<div class="run" data-ratio="r0p2" data-theta="theta10" data-starttime="start5000" data-jetdir="z" data-sim="r0p2_theta10_start5000Myr-z" data-snaps='[84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]' data-taus='[41.28209310118655, 102.76114301705456, 164.24019293292258, 216.9365214322388, 278.4155713481068, 339.89462126397484, 401.37367117984377, 462.85272109570997, 524.3317710115789, 577.0280995108951, 638.5071494267622, 699.9861993426312, 761.4652492584992]'>
   <p class="run-caption">r0p2_theta10_start5000Myr-z  —  R=1:5, θ=10° | jet ignition: 5 Gyr | initial jet direction: ẑ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start5000Myr-z_proj-x.gif" alt="r0p2_theta10_start5000Myr-z proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_theta10_start5000Myr-z_proj-x/snap_084.png" alt="r0p2_theta10_start5000Myr-z proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p2_theta10_start5000Myr-z_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start5000Myr-z_proj-y.gif" alt="r0p2_theta10_start5000Myr-z proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_theta10_start5000Myr-z_proj-y/snap_084.png" alt="r0p2_theta10_start5000Myr-z proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p2_theta10_start5000Myr-z_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_theta10_start5000Myr-z_proj-z.gif" alt="r0p2_theta10_start5000Myr-z proj-z">
-    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_theta10_start5000Myr-z_proj-z/snap_084.png" alt="r0p2_theta10_start5000Myr-z proj-z">
+    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_theta10_start5000Myr-z_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.04 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start50" data-jetdir="z">
+<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start50" data-jetdir="z" data-sim="r0p2_jetdir-z" data-snaps='[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]' data-taus='[14.406623721385657, 72.95809983173623, 131.50957594208685, 190.06105205243742, 254.4676757738231, 313.0191518841737, 371.5706279945242, 430.12210410487484, 494.5287278262605, 553.0802039366112, 611.6316800469617, 670.1831561573124, 734.589779878698]'>
   <p class="run-caption">r0p2_jetdir-z  —  R=1:5, θ=20° | jet ignition: 50 Myr | initial jet direction: ẑ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_jetdir-z_proj-x.gif" alt="r0p2_jetdir-z proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_jetdir-z_proj-x/snap_001.png" alt="r0p2_jetdir-z proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p2_jetdir-z_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_jetdir-z_proj-y.gif" alt="r0p2_jetdir-z proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_jetdir-z_proj-y/snap_001.png" alt="r0p2_jetdir-z proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p2_jetdir-z_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_jetdir-z_proj-z.gif" alt="r0p2_jetdir-z proj-z">
-    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_jetdir-z_proj-z/snap_001.png" alt="r0p2_jetdir-z proj-z">
+    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_jetdir-z_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.01 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start1000" data-jetdir="z">
+<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start1000" data-jetdir="z" data-sim="r0p2_start1000Myr-z" data-snaps='[17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]' data-taus='[24.65083193113537, 83.20230804148582, 141.75378415183673, 200.30526026218718, 264.711883983573, 323.26336009392344, 381.8148362042739, 440.3663123146248, 504.7729360360104, 563.3244121463608, 621.8758882567113, 680.4273643670622, 738.9788404774126]'>
   <p class="run-caption">r0p2_start1000Myr-z  —  R=1:5, θ=20° | jet ignition: 1 Gyr | initial jet direction: ẑ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_start1000Myr-z_proj-x.gif" alt="r0p2_start1000Myr-z proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_start1000Myr-z_proj-x/snap_017.png" alt="r0p2_start1000Myr-z proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p2_start1000Myr-z_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_start1000Myr-z_proj-y.gif" alt="r0p2_start1000Myr-z proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_start1000Myr-z_proj-y/snap_017.png" alt="r0p2_start1000Myr-z proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p2_start1000Myr-z_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_start1000Myr-z_proj-z.gif" alt="r0p2_start1000Myr-z proj-z">
-    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_start1000Myr-z_proj-z/snap_017.png" alt="r0p2_start1000Myr-z proj-z">
+    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_start1000Myr-z_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.02 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start2000" data-jetdir="z">
+<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start2000" data-jetdir="z" data-sim="r0p2_start2000Myr-z" data-snaps='[34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46]' data-taus='[43.44651625123561, 101.99799236158651, 160.54946847193696, 219.1009445822874, 283.50756830367345, 342.05904441402345, 400.61052052437435, 459.16199663472526, 523.5686203561108, 582.1200964664613, 640.6715725768113, 699.2230486871626, 763.6296724085478]'>
   <p class="run-caption">r0p2_start2000Myr-z  —  R=1:5, θ=20° | jet ignition: 2 Gyr | initial jet direction: ẑ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_start2000Myr-z_proj-x.gif" alt="r0p2_start2000Myr-z proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_start2000Myr-z_proj-x/snap_034.png" alt="r0p2_start2000Myr-z proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p2_start2000Myr-z_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_start2000Myr-z_proj-y.gif" alt="r0p2_start2000Myr-z proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_start2000Myr-z_proj-y/snap_034.png" alt="r0p2_start2000Myr-z proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p2_start2000Myr-z_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_start2000Myr-z_proj-z.gif" alt="r0p2_start2000Myr-z proj-z">
-    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_start2000Myr-z_proj-z/snap_034.png" alt="r0p2_start2000Myr-z proj-z">
+    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_start2000Myr-z_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.04 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start5000" data-jetdir="z">
+<div class="run" data-ratio="r0p2" data-theta="theta20" data-starttime="start5000" data-jetdir="z" data-sim="r0p2_start5000Myr-z" data-snaps='[84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]' data-taus='[41.28209310118655, 102.76114301705456, 164.24019293292258, 216.9365214322388, 278.4155713481068, 339.89462126397484, 401.37367117984377, 462.85272109570997, 524.3317710115789, 577.0280995108951, 638.5071494267622, 699.9861993426312, 761.4652492584992]'>
   <p class="run-caption">r0p2_start5000Myr-z  —  R=1:5, θ=20° | jet ignition: 5 Gyr | initial jet direction: ẑ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p2_start5000Myr-z_proj-x.gif" alt="r0p2_start5000Myr-z proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p2_start5000Myr-z_proj-x/snap_084.png" alt="r0p2_start5000Myr-z proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p2_start5000Myr-z_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_start5000Myr-z_proj-y.gif" alt="r0p2_start5000Myr-z proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p2_start5000Myr-z_proj-y/snap_084.png" alt="r0p2_start5000Myr-z proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p2_start5000Myr-z_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p2_start5000Myr-z_proj-z.gif" alt="r0p2_start5000Myr-z proj-z">
-    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p2_start5000Myr-z_proj-z/snap_084.png" alt="r0p2_start5000Myr-z proj-z">
+    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p2_start5000Myr-z_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.04 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start50" data-jetdir="z">
+<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start50" data-jetdir="z" data-sim="r0p5_theta10_jetdir-z" data-snaps='[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]' data-taus='[11.479049915868117, 72.95809983173623, 134.4371497476044, 195.91619966347247, 257.39524957934066, 310.0915780786562, 371.5706279945243, 433.04967791039246, 494.5287278262606, 556.0077777421287, 617.4868276579969, 670.1831561573124, 731.6622060731806]'>
   <p class="run-caption">r0p5_theta10_jetdir-z  —  R=1:2, θ=10° | jet ignition: 50 Myr | initial jet direction: ẑ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_theta10_jetdir-z_proj-x.gif" alt="r0p5_theta10_jetdir-z proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_theta10_jetdir-z_proj-x/snap_001.png" alt="r0p5_theta10_jetdir-z proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p5_theta10_jetdir-z_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_jetdir-z_proj-y.gif" alt="r0p5_theta10_jetdir-z proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_theta10_jetdir-z_proj-y/snap_001.png" alt="r0p5_theta10_jetdir-z proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p5_theta10_jetdir-z_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_jetdir-z_proj-z.gif" alt="r0p5_theta10_jetdir-z proj-z">
-    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_theta10_jetdir-z_proj-z/snap_001.png" alt="r0p5_theta10_jetdir-z proj-z">
+    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_theta10_jetdir-z_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.01 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start1000" data-jetdir="z">
+<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start1000" data-jetdir="z" data-sim="r0p5_theta10_start1000Myr-z" data-snaps='[17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]' data-taus='[27.57840573665294, 80.27473423596848, 141.75378415183673, 203.23283406770474, 264.7118839835732, 326.19093389944123, 387.66998381530925, 440.3663123146248, 501.84536223049304, 563.3244121463613, 624.8034620622291, 686.2825119780971, 738.9788404774131]'>
   <p class="run-caption">r0p5_theta10_start1000Myr-z  —  R=1:2, θ=10° | jet ignition: 1 Gyr | initial jet direction: ẑ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start1000Myr-z_proj-x.gif" alt="r0p5_theta10_start1000Myr-z proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_theta10_start1000Myr-z_proj-x/snap_017.png" alt="r0p5_theta10_start1000Myr-z proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p5_theta10_start1000Myr-z_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start1000Myr-z_proj-y.gif" alt="r0p5_theta10_start1000Myr-z proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_theta10_start1000Myr-z_proj-y/snap_017.png" alt="r0p5_theta10_start1000Myr-z proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p5_theta10_start1000Myr-z_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start1000Myr-z_proj-z.gif" alt="r0p5_theta10_start1000Myr-z proj-z">
-    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_theta10_start1000Myr-z_proj-z/snap_017.png" alt="r0p5_theta10_start1000Myr-z proj-z">
+    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_theta10_start1000Myr-z_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.03 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start2000" data-jetdir="z">
+<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start2000" data-jetdir="z" data-sim="r0p5_theta10_start2000Myr-z" data-snaps='[34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46]' data-taus='[46.3740900567534, 99.07041855606894, 160.54946847193696, 222.02851838780498, 283.50756830367345, 344.986618219541, 406.4656681354095, 459.16199663472526, 520.6410465505933, 582.1200964664613, 643.5991463823293, 705.0781962981978, 766.5572462140658]'>
   <p class="run-caption">r0p5_theta10_start2000Myr-z  —  R=1:2, θ=10° | jet ignition: 2 Gyr | initial jet direction: ẑ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start2000Myr-z_proj-x.gif" alt="r0p5_theta10_start2000Myr-z proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_theta10_start2000Myr-z_proj-x/snap_034.png" alt="r0p5_theta10_start2000Myr-z proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p5_theta10_start2000Myr-z_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start2000Myr-z_proj-y.gif" alt="r0p5_theta10_start2000Myr-z proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_theta10_start2000Myr-z_proj-y/snap_034.png" alt="r0p5_theta10_start2000Myr-z proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p5_theta10_start2000Myr-z_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start2000Myr-z_proj-z.gif" alt="r0p5_theta10_start2000Myr-z proj-z">
-    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_theta10_start2000Myr-z_proj-z/snap_034.png" alt="r0p5_theta10_start2000Myr-z proj-z">
+    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_theta10_start2000Myr-z_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.05 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start5000" data-jetdir="z">
+<div class="run" data-ratio="r0p5" data-theta="theta10" data-starttime="start5000" data-jetdir="z" data-sim="r0p5_theta10_start5000Myr-z" data-snaps='[84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]' data-taus='[41.28209310118655, 102.76114301705456, 164.24019293292258, 216.9365214322388, 278.4155713481068, 339.89462126397484, 401.37367117984377, 462.85272109570997, 524.3317710115789, 577.0280995108951, 638.5071494267622, 699.9861993426312, 761.4652492584992]'>
   <p class="run-caption">r0p5_theta10_start5000Myr-z  —  R=1:2, θ=10° | jet ignition: 5 Gyr | initial jet direction: ẑ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start5000Myr-z_proj-x.gif" alt="r0p5_theta10_start5000Myr-z proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_theta10_start5000Myr-z_proj-x/snap_084.png" alt="r0p5_theta10_start5000Myr-z proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p5_theta10_start5000Myr-z_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start5000Myr-z_proj-y.gif" alt="r0p5_theta10_start5000Myr-z proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_theta10_start5000Myr-z_proj-y/snap_084.png" alt="r0p5_theta10_start5000Myr-z proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p5_theta10_start5000Myr-z_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_theta10_start5000Myr-z_proj-z.gif" alt="r0p5_theta10_start5000Myr-z proj-z">
-    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_theta10_start5000Myr-z_proj-z/snap_084.png" alt="r0p5_theta10_start5000Myr-z proj-z">
+    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_theta10_start5000Myr-z_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.04 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start50" data-jetdir="z">
+<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start50" data-jetdir="z" data-sim="r0p5_jetdir-z" data-snaps='[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]' data-taus='[14.406623721385657, 72.95809983173623, 131.50957594208685, 190.06105205243742, 254.4676757738231, 313.0191518841737, 371.5706279945242, 430.12210410487484, 494.5287278262605, 553.0802039366112, 611.6316800469617, 670.1831561573124, 734.589779878698]'>
   <p class="run-caption">r0p5_jetdir-z  —  R=1:2, θ=20° | jet ignition: 50 Myr | initial jet direction: ẑ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_jetdir-z_proj-x.gif" alt="r0p5_jetdir-z proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_jetdir-z_proj-x/snap_001.png" alt="r0p5_jetdir-z proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p5_jetdir-z_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_jetdir-z_proj-y.gif" alt="r0p5_jetdir-z proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_jetdir-z_proj-y/snap_001.png" alt="r0p5_jetdir-z proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p5_jetdir-z_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_jetdir-z_proj-z.gif" alt="r0p5_jetdir-z proj-z">
-    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_jetdir-z_proj-z/snap_001.png" alt="r0p5_jetdir-z proj-z">
+    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_jetdir-z_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.01 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start1000" data-jetdir="z">
+<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start1000" data-jetdir="z" data-sim="r0p5_start1000Myr-z" data-snaps='[17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]' data-taus='[27.57840573665294, 80.27473423596848, 141.75378415183673, 203.23283406770474, 264.7118839835732, 326.19093389944123, 387.66998381530925, 440.3663123146248, 501.84536223049304, 563.3244121463613, 624.8034620622291, 686.2825119780971, 738.9788404774131]'>
   <p class="run-caption">r0p5_start1000Myr-z  —  R=1:2, θ=20° | jet ignition: 1 Gyr | initial jet direction: ẑ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_start1000Myr-z_proj-x.gif" alt="r0p5_start1000Myr-z proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_start1000Myr-z_proj-x/snap_017.png" alt="r0p5_start1000Myr-z proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p5_start1000Myr-z_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_start1000Myr-z_proj-y.gif" alt="r0p5_start1000Myr-z proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_start1000Myr-z_proj-y/snap_017.png" alt="r0p5_start1000Myr-z proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p5_start1000Myr-z_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_start1000Myr-z_proj-z.gif" alt="r0p5_start1000Myr-z proj-z">
-    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_start1000Myr-z_proj-z/snap_017.png" alt="r0p5_start1000Myr-z proj-z">
+    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_start1000Myr-z_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.03 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start2000" data-jetdir="z">
+<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start2000" data-jetdir="z" data-sim="r0p5_start2000Myr-z" data-snaps='[34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46]' data-taus='[46.3740900567534, 99.07041855606894, 160.54946847193696, 222.02851838780498, 283.50756830367345, 344.986618219541, 406.4656681354095, 459.16199663472526, 520.6410465505933, 582.1200964664613, 643.5991463823293, 705.0781962981978, 766.5572462140658]'>
   <p class="run-caption">r0p5_start2000Myr-z  —  R=1:2, θ=20° | jet ignition: 2 Gyr | initial jet direction: ẑ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_start2000Myr-z_proj-x.gif" alt="r0p5_start2000Myr-z proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_start2000Myr-z_proj-x/snap_034.png" alt="r0p5_start2000Myr-z proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p5_start2000Myr-z_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_start2000Myr-z_proj-y.gif" alt="r0p5_start2000Myr-z proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_start2000Myr-z_proj-y/snap_034.png" alt="r0p5_start2000Myr-z proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p5_start2000Myr-z_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_start2000Myr-z_proj-z.gif" alt="r0p5_start2000Myr-z proj-z">
-    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_start2000Myr-z_proj-z/snap_034.png" alt="r0p5_start2000Myr-z proj-z">
+    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_start2000Myr-z_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.05 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
+  </div>
 </div>
-<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start5000" data-jetdir="z">
+<div class="run" data-ratio="r0p5" data-theta="theta20" data-starttime="start5000" data-jetdir="z" data-sim="r0p5_start5000Myr-z" data-snaps='[84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]' data-taus='[41.28209310118655, 102.76114301705456, 164.24019293292258, 216.9365214322388, 278.4155713481068, 339.89462126397484, 401.37367117984377, 462.85272109570997, 524.3317710115789, 577.0280995108951, 638.5071494267622, 699.9861993426312, 761.4652492584992]'>
   <p class="run-caption">r0p5_start5000Myr-z  —  R=1:2, θ=20° | jet ignition: 5 Gyr | initial jet direction: ẑ</p>
   <div class="row">
   <figure>
-    <img loading="lazy" src="r0p5_start5000Myr-z_proj-x.gif" alt="r0p5_start5000Myr-z proj-x">
-    <figcaption>Projection X</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-x" src="frames/r0p5_start5000Myr-z_proj-x/snap_084.png" alt="r0p5_start5000Myr-z proj-x">
+    <figcaption>Projection X <a class="gif-dl" href="r0p5_start5000Myr-z_proj-x.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_start5000Myr-z_proj-y.gif" alt="r0p5_start5000Myr-z proj-y">
-    <figcaption>Projection Y</figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-y" src="frames/r0p5_start5000Myr-z_proj-y/snap_084.png" alt="r0p5_start5000Myr-z proj-y">
+    <figcaption>Projection Y <a class="gif-dl" href="r0p5_start5000Myr-z_proj-y.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
   <figure>
-    <img loading="lazy" src="r0p5_start5000Myr-z_proj-z.gif" alt="r0p5_start5000Myr-z proj-z">
-    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span></figcaption>
+    <img class="scrub-img" loading="lazy" data-dir="proj-z" src="frames/r0p5_start5000Myr-z_proj-z/snap_084.png" alt="r0p5_start5000Myr-z proj-z">
+    <figcaption>Projection Z <span class="badge">LOS ∥ jet</span> <a class="gif-dl" href="r0p5_start5000Myr-z_proj-z.gif" title="Download animated GIF">⬇ GIF</a></figcaption>
   </figure>
+  </div>
+  <div class="scrub-controls">
+    <button class="play-btn" type="button">▶ Play</button>
+    <input class="scrub-slider" type="range" min="0" max="12" value="0" step="1">
+    <span class="tau-label">τ = 0.04 Gyr</span>
+    <select class="speed-select" title="Playback speed">
+      <option value="1000">0.5×</option>
+      <option value="600" selected>1×</option>
+      <option value="300">2×</option>
+      <option value="150">4×</option>
+    </select>
   </div>
 </div>
 </div>
 
 <script>
+document.querySelectorAll('.run').forEach(run => {
+  const snaps = JSON.parse(run.dataset.snaps);
+  const taus  = JSON.parse(run.dataset.taus);
+  const sim   = run.dataset.sim;
+  const slider   = run.querySelector('.scrub-slider');
+  const tauLabel = run.querySelector('.tau-label');
+  const imgs      = run.querySelectorAll('.scrub-img');
+  const playBtn   = run.querySelector('.play-btn');
+  const speedSel  = run.querySelector('.speed-select');
+  let timer = null;
+
+  function render(idx) {
+    const snap = snaps[idx];
+    const snapStr = String(snap).padStart(3, '0');
+    imgs.forEach(img => {
+      img.src = `frames/${sim}_${img.dataset.dir}/snap_${snapStr}.png`;
+    });
+    tauLabel.textContent = `τ = ${(taus[idx] / 1000).toFixed(2)} Gyr`;
+  }
+
+  function stopPlaying() {
+    if (timer) { clearInterval(timer); timer = null; playBtn.textContent = '▶ Play'; }
+  }
+
+  slider.addEventListener('input', () => {
+    stopPlaying();
+    render(parseInt(slider.value, 10));
+  });
+
+  playBtn.addEventListener('click', () => {
+    if (timer) {
+      stopPlaying();
+      return;
+    }
+    playBtn.textContent = '⏸ Pause';
+    timer = setInterval(() => {
+      const next = (parseInt(slider.value, 10) + 1) % snaps.length;
+      slider.value = next;
+      render(next);
+    }, parseInt(speedSel.value, 10));
+  });
+
+  speedSel.addEventListener('change', () => {
+    if (timer) { stopPlaying(); }
+  });
+});
+
 const FILTER_IDS = ['f-ratio','f-theta','f-start','f-jetdir'];
 const DATA_KEYS  = ['ratio',  'theta',  'starttime','jetdir'];
 
